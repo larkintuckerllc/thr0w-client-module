@@ -50,6 +50,13 @@ export const login = (username, password) => {
 export const logout = () => {
   window.localStorage.removeItem('thr0w_token');
 };
+export const disconnect = () => {
+  if (socket === null) return;
+  socket.disconnect();
+  window.localStorage.removeItem('thr0w_channel');
+  socket = null;
+  channel = null;
+};
 export const connect = (c, msgCb) => {
   if (baseSocket === undefined) throw new Error();
   if (!authenticated()) throw new Error();
@@ -59,7 +66,7 @@ export const connect = (c, msgCb) => {
   return new Promise((resolve, reject) => {
     let connected = false;
     const timeout = window.setTimeout(() => {
-      socket.disconnect();
+      if (socket !== null) socket.disconnect();
       socket = null;
       reject({ message: '500' });
     }, 5000);
