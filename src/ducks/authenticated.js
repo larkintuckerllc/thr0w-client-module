@@ -49,7 +49,8 @@ export default combineReducers({
   settingErrorMessage,
 });
 // ACCESSORS
-export const getAuthenticated = (state) => state[reducerMountPoint].value;
+export const getAuthenticated = (state) =>
+  state[fromStrings.reducerMountPoint][reducerMountPoint].value;
 // ACTION CREATORS
 export const login = (username, password) => (dispatch) => {
   dispatch({
