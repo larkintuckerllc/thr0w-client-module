@@ -1,21 +1,22 @@
 import { combineReducers } from 'redux';
 import * as fromThr0wClientModule from '../';
+import { getChannel } from './channel';
 import { Thr0wException } from '../util/exceptions';
 import { ACTION_PREFIX, REDUCER_MOUNT_POINT } from '../strings';
 
 // API
 // REDUCER MOUNT POINT
-const reducerMountPoint = 'authenticated';
+const reducerMountPoint = 'connected';
 // ACTIONS
-export const SET_AUTHENTICATED_REQUEST = `${ACTION_PREFIX}SET_AUTHENTICATED_REQUEST`;
-export const SET_AUTHENTICATED_SUCCESS = `${ACTION_PREFIX}SET_AUTHENTICATED_SUCCESS`;
-export const SET_AUTHENTICATED_ERROR = `${ACTION_PREFIX}SET_AUTHENTICATED_ERROR`;
+export const SET_CONNECTED_REQUEST = `${ACTION_PREFIX}SET_CONNECTED_REQUEST`;
+export const SET_CONNECTED_SUCCESS = `${ACTION_PREFIX}SET_CONNECTED_SUCCESS`;
+export const SET_CONNECTED_ERROR = `${ACTION_PREFIX}SET_CONNECTED_ERROR`;
 // ACTION CREATOR VALIDATORS
 // SCHEMA
 // REDUCERS
-const value = (state = fromThr0wClientModule.authenticated(), action) => {
+const value = (state = false, action) => {
   switch (action.type) {
-    case SET_AUTHENTICATED_SUCCESS:
+    case SET_CONNECTED_SUCCESS:
       return action.value;
     default:
       return state;
@@ -23,10 +24,10 @@ const value = (state = fromThr0wClientModule.authenticated(), action) => {
 };
 const isSetting = (state = false, action) => {
   switch (action.type) {
-    case SET_AUTHENTICATED_REQUEST:
+    case SET_CONNECTED_REQUEST:
       return true;
-    case SET_AUTHENTICATED_SUCCESS:
-    case SET_AUTHENTICATED_ERROR:
+    case SET_CONNECTED_SUCCESS:
+    case SET_CONNECTED_ERROR:
       return false;
     default:
       return state;
@@ -34,10 +35,10 @@ const isSetting = (state = false, action) => {
 };
 const settingErrorMessage = (state = null, action) => {
   switch (action.type) {
-    case SET_AUTHENTICATED_ERROR:
+    case SET_CONNECTED_ERROR:
       return action.message;
-    case SET_AUTHENTICATED_REQUEST:
-    case SET_AUTHENTICATED_SUCCESS:
+    case SET_CONNECTED_REQUEST:
+    case SET_CONNECTED_SUCCESS:
       return null;
     default:
       return state;
@@ -49,38 +50,37 @@ export default combineReducers({
   settingErrorMessage,
 });
 // ACCESSORS
-export const getAuthenticated = (state) =>
-  state[REDUCER_MOUNT_POINT][reducerMountPoint].value;
+export const getConnected = (state) => state[REDUCER_MOUNT_POINT][reducerMountPoint].value;
 // ACTION CREATORS
-export const login = (username, password) => (dispatch) => {
+export const connect = () => (dispatch, getState) => {
   dispatch({
-    type: SET_AUTHENTICATED_REQUEST,
+    type: SET_CONNECTED_REQUEST,
     value: true,
   });
-  return fromThr0wClientModule.login(username, password)
+  return fromThr0wClientModule.connect(getChannel(getState()), () => {})
     .then(() => {
       dispatch({
-        type: SET_AUTHENTICATED_SUCCESS,
+        type: SET_CONNECTED_SUCCESS,
         value: true,
       });
     },
     error => {
       dispatch({
-        type: SET_AUTHENTICATED_ERROR,
+        type: SET_CONNECTED_ERROR,
         message: error.message,
       });
       throw new Thr0wException(error.message);
     }
   );
 };
-export const logout = () => (dispatch) => {
+export const disconnect = () => (dispatch) => {
   dispatch({
-    type: SET_AUTHENTICATED_REQUEST,
+    type: SET_CONNECTED_REQUEST,
     value: false,
   });
-  fromThr0wClientModule.logout();
+  fromThr0wClientModule.disconnect();
   dispatch({
-    type: SET_AUTHENTICATED_SUCCESS,
+    type: SET_CONNECTED_SUCCESS,
     value: false,
   });
 };

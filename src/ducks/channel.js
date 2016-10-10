@@ -1,9 +1,9 @@
 import { getChannel as thr0wGetChannel } from '../';
-import { ACTION_PREFIX } from '../strings';
+import { ACTION_PREFIX, REDUCER_MOUNT_POINT } from '../strings';
 
 // API
 // REDUCER MOUNT POINT
-const reducerMountPoint = 'thr0wChannel';
+const reducerMountPoint = 'channel';
 // ACTIONS
 export const SET_CHANNEL = `${ACTION_PREFIX}SET_CHANNEL`;
 // ACTION CREATOR VALIDATORS
@@ -20,7 +20,7 @@ export default (state = thr0wGetChannel(), action) => {
   }
 };
 // ACCESSORS
-export const getChannel = (state) => state[reducerMountPoint];
+export const getChannel = (state) => state[REDUCER_MOUNT_POINT][reducerMountPoint];
 // ACTION CREATORS
 export const setChannel = (value) => {
   if (!validChannel(value)) throw new Error();
