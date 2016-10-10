@@ -90,3 +90,26 @@ export const connect = (c, msgCb) => {
     authenticate();
   });
 };
+export const thr0w = (channels, message) => {
+  if (socket == null) throw new Error();
+  if (channels === undefined || !Array.isArray(channels)) {
+    throw new Error();
+  }
+  if (message === undefined) throw new Error();
+  if (channels.length === 0) {
+    return;
+  }
+  socket.emit('thr0w', JSON.stringify({ channels, message }));
+};
+export const onMessage = (messageCb) => {
+  if (socket == null) throw new Error();
+  if (messageCb === undefined ||
+    typeof messageCb !== 'function') throw new Error();
+  socket.on('message', messageCb);
+};
+export const offMessage = (messageCb) => {
+  if (socket == null) throw new Error();
+  if (messageCb === undefined ||
+    typeof messageCb !== 'function') throw new Error();
+  socket.off('message', messageCb);
+};
