@@ -1,6 +1,6 @@
 {
   "name": "thr0w-client-module",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Thr0w Client Module",
   "scripts": {
     "prepublish": "./node_modules/.bin/babel -d lib src/",
