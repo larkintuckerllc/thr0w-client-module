@@ -31,9 +31,8 @@ export const grid = (channel, frameEl, contentEl, matrix, dimensions) => {
   modFrameEl.style.height = `${(dimensions[vpos].scale * dimensions[vpos].height)}px`;
   const tX = (dimensions[vpos].width * (1 - dimensions[vpos].scale)) / 2;
   const tY = (dimensions[vpos].height * (1 - dimensions[vpos].scale)) / 2;
-  const sX = (dimensions[vpos].width * (1 - dimensions[vpos].scale)) / 2;
-  const sY = (dimensions[vpos].height * (1 - dimensions[vpos].scale)) / 2;
-  modFrameEl.style.transform = `translate(${tX}px,${tY}px) scale(${sX},${sY})`;
+  const sXY = 1 / dimensions[vpos].scale;
+  modFrameEl.style.transform = `translate(${tX}px,${tY}px) scale(${sXY},${sXY})`;
   modContentEl.style.width = `${width}px`;
   modContentEl.style.height = `${height}px`;
   for (let i = 0; i < vpos; i++) {
